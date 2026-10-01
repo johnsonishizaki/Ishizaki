@@ -1,0 +1,6 @@
+{
+  "summary":  "Architectural blueprint and implementation plan for Ishizaki, a private single-user academic operating system. Outlines the 4-view debloated UI, local-first IndexedDB and Firebase sync engine, Backblaze B2 vault proxy, 3-tier AI routing cascade (Groq -> OpenRouter -> Gemini), login-driven adaptive timetable, rapid-revision Exam Mode, and verifiable system diagnostics.",
+  "updatedAt":  "2026-10-01T17:21:47.499447622Z",
+  "requestFeedback":  true,
+  "userFacing":  true
+}

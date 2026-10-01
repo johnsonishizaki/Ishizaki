@@ -1,0 +1,6 @@
+{
+  "name": "Ishizaki",
+  "description": "Private, single-user academic operating system for WASSCE and SAT preparation, adaptive scheduling, and personalized learning.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

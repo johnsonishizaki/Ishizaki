@@ -1,0 +1,56 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 1. Global default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-\\.]+$');
+    }
+
+    // User scope
+    match /users/{userId} {
+      allow read, write: if isOwner(userId) && isValidId(userId);
+
+      // Subcollections: profile, positions, mastery, mistakes, textbooks, vault, sessions
+      match /profile/{docId} {
+        allow read, write: if isOwner(userId) && isValidId(docId);
+      }
+
+      match /positions/{subjectId} {
+        allow read, write: if isOwner(userId) && isValidId(subjectId);
+      }
+
+      match /mastery/{nodeId} {
+        allow read, write: if isOwner(userId) && isValidId(nodeId);
+      }
+
+      match /mistakes/{mistakeId} {
+        allow read, write: if isOwner(userId) && isValidId(mistakeId);
+      }
+
+      match /textbooks/{textbookId} {
+        allow read, write: if isOwner(userId) && isValidId(textbookId);
+      }
+
+      match /vault/{fileId} {
+        allow read, write: if isOwner(userId) && isValidId(fileId);
+      }
+
+      match /sessions/{sessionId} {
+        allow read, write: if isOwner(userId) && isValidId(sessionId);
+      }
+    }
+  }
+}

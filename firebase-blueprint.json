@@ -1,0 +1,370 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User academic profile and configuration for Ishizaki",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "The Firebase Auth UID of the student"
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "The student email address"
+        },
+        "educationLevel": {
+          "type": "string",
+          "enum": ["SHS1", "SHS2", "SHS3"],
+          "description": "Current Senior High School academic level"
+        },
+        "examTargetYear": {
+          "type": "number",
+          "description": "Target examination graduation year, typically 2028"
+        },
+        "wassceWeight": {
+          "type": "number",
+          "description": "Curriculum weighting for WASSCE (default 0.65)"
+        },
+        "satWeight": {
+          "type": "number",
+          "description": "Curriculum weighting for Digital SAT (default 0.35)"
+        },
+        "preferredSessionLength": {
+          "type": "number",
+          "description": "Default study session length in minutes"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Account setup ISO timestamp"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Profile last update ISO timestamp"
+        }
+      },
+      "required": ["userId", "email", "educationLevel", "examTargetYear"]
+    },
+    "AcademicPosition": {
+      "title": "AcademicPosition",
+      "description": "Current curriculum coordinates for a specific subject",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "The Firebase Auth UID"
+        },
+        "subject": {
+          "type": "string",
+          "description": "The academic subject name"
+        },
+        "strand": {
+          "type": "string",
+          "description": "Current strand title"
+        },
+        "subStrand": {
+          "type": "string",
+          "description": "Current sub-strand title"
+        },
+        "topic": {
+          "type": "string",
+          "description": "Specific focal topic"
+        },
+        "nodeId": {
+          "type": "string",
+          "description": "Curriculum node identifier"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Last updated timestamp"
+        }
+      },
+      "required": ["userId", "subject", "topic"]
+    },
+    "MasteryRecord": {
+      "title": "MasteryRecord",
+      "description": "Concept-level mastery metrics and spaced repetition tracking",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "The Firebase Auth UID"
+        },
+        "nodeId": {
+          "type": "string",
+          "description": "The curriculum node identifier"
+        },
+        "subject": {
+          "type": "string",
+          "description": "Academic subject"
+        },
+        "score": {
+          "type": "number",
+          "description": "Mastery score from 0 to 100"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["NOT_STARTED", "IN_PROGRESS", "REVIEW_NEEDED", "SECURE"],
+          "description": "Categorical mastery status"
+        },
+        "confidenceLevel": {
+          "type": "number",
+          "description": "Student perceived confidence (1-5)"
+        },
+        "attemptCount": {
+          "type": "number",
+          "description": "Total attempts at practice questions"
+        },
+        "correctCount": {
+          "type": "number",
+          "description": "Successful question responses"
+        },
+        "lastReviewedAt": {
+          "type": "string",
+          "description": "Last review timestamp"
+        },
+        "nextReviewDue": {
+          "type": "string",
+          "description": "Spaced repetition due timestamp"
+        }
+      },
+      "required": ["userId", "nodeId", "subject", "score", "status"]
+    },
+    "MistakeItem": {
+      "title": "MistakeItem",
+      "description": "Detailed error bank record for targeted weakness repair",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "The Firebase Auth UID"
+        },
+        "mistakeId": {
+          "type": "string",
+          "description": "Unique identifier for this error instance"
+        },
+        "subject": {
+          "type": "string",
+          "description": "Subject name"
+        },
+        "topic": {
+          "type": "string",
+          "description": "Topic or concept name"
+        },
+        "nodeId": {
+          "type": "string",
+          "description": "Related curriculum node identifier"
+        },
+        "studentPrompt": {
+          "type": "string",
+          "description": "The prompt or question attempted"
+        },
+        "incorrectAnswer": {
+          "type": "string",
+          "description": "The answer provided by the student"
+        },
+        "correctAnswer": {
+          "type": "string",
+          "description": "The correct answer and expected method"
+        },
+        "errorCategory": {
+          "type": "string",
+          "enum": ["conceptual", "method", "calculation", "careless", "misread"],
+          "description": "Taxonomy of error"
+        },
+        "explanation": {
+          "type": "string",
+          "description": "Why the mistake occurred and how to repair it"
+        },
+        "recurrenceCount": {
+          "type": "number",
+          "description": "Number of times this error has recurred"
+        },
+        "resolved": {
+          "type": "boolean",
+          "description": "Whether the student has proven mastery since"
+        },
+        "timestamp": {
+          "type": "string",
+          "description": "Timestamp of error recording"
+        }
+      },
+      "required": ["userId", "mistakeId", "subject", "errorCategory", "resolved"]
+    },
+    "TextbookItem": {
+      "title": "TextbookItem",
+      "description": "Personalized generated or adapted textbook chapter",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "The Firebase Auth UID"
+        },
+        "textbookId": {
+          "type": "string",
+          "description": "Unique textbook ID"
+        },
+        "subject": {
+          "type": "string",
+          "description": "Subject"
+        },
+        "topic": {
+          "type": "string",
+          "description": "Chapter topic"
+        },
+        "nodeId": {
+          "type": "string",
+          "description": "Linked curriculum node"
+        },
+        "title": {
+          "type": "string",
+          "description": "Human-readable textbook title"
+        },
+        "contentMarkdown": {
+          "type": "string",
+          "description": "Full chapter prose, explanations, and worked examples"
+        },
+        "customNotes": {
+          "type": "string",
+          "description": "Student personal marginalia or summaries"
+        },
+        "generatedAt": {
+          "type": "string",
+          "description": "Generation timestamp"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Last edit timestamp"
+        }
+      },
+      "required": ["userId", "textbookId", "subject", "topic", "title", "contentMarkdown"]
+    },
+    "VaultFile": {
+      "title": "VaultFile",
+      "description": "Metadata for personal academic files stored in Backblaze B2 / Vault",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "The Firebase Auth UID"
+        },
+        "fileId": {
+          "type": "string",
+          "description": "Unique file identifier"
+        },
+        "fileName": {
+          "type": "string",
+          "description": "Original file name"
+        },
+        "mimeType": {
+          "type": "string",
+          "description": "MIME type"
+        },
+        "sizeBytes": {
+          "type": "number",
+          "description": "Size of file in bytes"
+        },
+        "b2Key": {
+          "type": "string",
+          "description": "Storage path key"
+        },
+        "folder": {
+          "type": "string",
+          "description": "Organization folder or category"
+        },
+        "tags": {
+          "type": "string",
+          "description": "Comma-separated search tags"
+        },
+        "extractedText": {
+          "type": "string",
+          "description": "Extracted OCR or text for AI retrieval and search"
+        },
+        "aiIndexed": {
+          "type": "boolean",
+          "description": "Whether document is indexed for Ask retrieval"
+        },
+        "offlineCached": {
+          "type": "boolean",
+          "description": "Whether file is cached in local IndexedDB"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Upload timestamp"
+        }
+      },
+      "required": ["userId", "fileId", "fileName", "mimeType", "sizeBytes"]
+    },
+    "StudySession": {
+      "title": "StudySession",
+      "description": "Historical log of an adaptive study session",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "The Firebase Auth UID"
+        },
+        "sessionId": {
+          "type": "string",
+          "description": "Unique session ID"
+        },
+        "subject": {
+          "type": "string",
+          "description": "Subject studied"
+        },
+        "topic": {
+          "type": "string",
+          "description": "Topic studied"
+        },
+        "durationMinutes": {
+          "type": "number",
+          "description": "Actual duration completed"
+        },
+        "actionsCompleted": {
+          "type": "string",
+          "description": "Summary of actions taken during session"
+        },
+        "scoreDelta": {
+          "type": "number",
+          "description": "Mastery change"
+        },
+        "timestamp": {
+          "type": "string",
+          "description": "Session timestamp"
+        }
+      },
+      "required": ["userId", "sessionId", "subject", "topic", "durationMinutes"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}/profile/data": {
+      "schema": "UserProfile",
+      "description": "Primary private profile for the student"
+    },
+    "/users/{userId}/positions/{subjectId}": {
+      "schema": "AcademicPosition",
+      "description": "Current curriculum coordinates by subject"
+    },
+    "/users/{userId}/mastery/{nodeId}": {
+      "schema": "MasteryRecord",
+      "description": "Concept mastery score and spaced repetition metadata"
+    },
+    "/users/{userId}/mistakes/{mistakeId}": {
+      "schema": "MistakeItem",
+      "description": "Persistent bank of categorized student mistakes"
+    },
+    "/users/{userId}/textbooks/{textbookId}": {
+      "schema": "TextbookItem",
+      "description": "Generated and customized textbooks"
+    },
+    "/users/{userId}/vault/{fileId}": {
+      "schema": "VaultFile",
+      "description": "Metadata for files in the academic vault"
+    },
+    "/users/{userId}/sessions/{sessionId}": {
+      "schema": "StudySession",
+      "description": "Completed study session history log"
+    }
+  }
+}
