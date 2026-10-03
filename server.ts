@@ -66,7 +66,7 @@ app.post('/api/ai/complete', async (req: Request, res: Response) => {
   // Tier 1: Groq API
   if (process.env.GROQ_API_KEY) {
     const startTime = Date.now();
-    const model = 'mixtral-8x7b-32768';
+    const model = preferredTier === 'heavy' ? 'openai/gpt-oss-120b' : 'qwen/qwen3.8-27b';
     try {
       const groqRes = await fetch('https://api.groq.com/openai/v1/chat/completions', {
         method: 'POST',
@@ -104,7 +104,7 @@ app.post('/api/ai/complete', async (req: Request, res: Response) => {
   // Tier 2: OpenRouter Fallback
   if (process.env.OPENROUTER_API_KEY) {
     const startTime = Date.now();
-    const model = preferredTier === 'heavy' ? 'deepseek/deepseek-r1' : 'meta-llama/llama-3.3-70b-instruct';
+    const model = 'meta-llama/llama-3.3-70b-instruct';
     try {
       const openRouterRes = await fetch('https://openrouter.ai/api/v1/chat/completions', {
         method: 'POST',

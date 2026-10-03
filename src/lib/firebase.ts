@@ -1,5 +1,5 @@
 import { initializeApp, getApps, getApp } from 'firebase/app';
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, User } from 'firebase/auth';
+import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, signOut, User } from 'firebase/auth';
 import { getFirestore, doc, getDocFromServer } from 'firebase/firestore';
 import firebaseConfig from '../../firebase-applet-config.json';
 
@@ -75,9 +75,25 @@ export async function loginWithGoogle(): Promise<User | null> {
   try {
     const cred = await signInWithPopup(auth, provider);
     return cred.user;
-  } catch (error) {
+  } catch (error: any) {
+    if (error.code === 'auth/popup-blocked' || error.code === 'auth/cancelled-popup-request') {
+      console.warn('Popup blocked, falling back to redirect');
+      await signInWithRedirect(auth, provider);
+      return null; // Page will redirect
+    }
     console.error('Google Sign-in error:', error);
     throw error;
+  }
+}
+
+export async function handleRedirectResult(): Promise<User | null> {
+  const { getRedirectResult } = await import('firebase/auth');
+  try {
+    const result = await getRedirectResult(auth);
+    return result ? result.user : null;
+  } catch (error) {
+    console.error('Redirect result error:', error);
+    return null;
   }
 }
 

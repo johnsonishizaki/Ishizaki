@@ -55,6 +55,11 @@ export default function App() {
 
   // Listen to Firebase Auth state
   useEffect(() => {
+    const initAuth = async () => {
+      await import('./lib/firebase').then(m => m.handleRedirectResult());
+    };
+    initAuth();
+
     const unsub = onAuthStateChanged(auth, (user) => {
       if (user) {
         setIsUnlocked(true);
